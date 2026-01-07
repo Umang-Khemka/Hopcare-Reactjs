@@ -14,11 +14,10 @@ import DocProfilePage from "./pages/DoctorPages/DocProfilePage.jsx";
 import DocDashboardPage from "./pages/DoctorPages/DocDashboardPage.jsx";
 import CalendarPage from "./pages/DoctorPages/CalendarPage.jsx";
 import HistoryPage from "./pages/DoctorPages/HistoryPage.jsx";
-import PrescriptionPage from "./pages/DoctorPages/PrescriptionPage.jsx";
 
 import ProtectedRoute from "./components/ProtectedRoute";
 import RoleBasedRoute from "./components/RoleBasedRoute";
-
+import RoleRedirect from "./pages/RoleRedirect.jsx";
 
 function App() {
   const checkAuth = authStore((state) => state.checkAuth);
@@ -30,7 +29,14 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<LandingPage />} />
+        <Route
+          path="/"
+          element={
+            <RoleRedirect>
+              <LandingPage />
+            </RoleRedirect>
+          }
+        />
         <Route path="/auth" element={<AuthPage />} />
         <Route path="/find" element={<FindDocPage />} />
         <Route
@@ -60,7 +66,7 @@ function App() {
           element={
             <ProtectedRoute>
               <RoleBasedRoute allowedRoles={["patient"]}>
-                <PatientDashboard/>
+                <PatientDashboard />
               </RoleBasedRoute>
             </ProtectedRoute>
           }
@@ -89,22 +95,11 @@ function App() {
         />
 
         <Route
-          path="/doctor/prescriptions"
-          element={
-            <ProtectedRoute>
-              <RoleBasedRoute allowedRoles={["doctor"]}>
-                <PrescriptionPage/>
-              </RoleBasedRoute>
-            </ProtectedRoute>
-          }
-        />
-
-        <Route
           path="/doctor/history"
           element={
             <ProtectedRoute>
               <RoleBasedRoute allowedRoles={["doctor"]}>
-                <HistoryPage/>
+                <HistoryPage />
               </RoleBasedRoute>
             </ProtectedRoute>
           }
