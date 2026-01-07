@@ -6,6 +6,7 @@ export const doctorStore = create((set) => ({
   loading: false,
   error: null,
   prescription: null,
+  prescriptions: [],
 
   getAllAppointments: async () => {
     set({ loading: true, errro: null });
@@ -56,11 +57,11 @@ export const doctorStore = create((set) => ({
         diagnosis,
         notes,
       });
-      set({loading: false});
-      set({prescription: res.data.prescription});
+      set({ loading: false });
+      set({ prescription: res.data.prescription });
       return true;
     } catch (error) {
-        console.error("Create prescription error:", error);
+      console.error("Create prescription error:", error);
 
       set({
         loading: false,
@@ -68,6 +69,73 @@ export const doctorStore = create((set) => ({
       });
 
       throw error;
+    }
+  },
+
+  getAllPrescriptions: async () => {
+    set({ loading: true, error: null });
+
+    try {
+      const res = await doctorInstance.get("/all-prescriptions");
+      set({ prescriptions: res.data.data, loading: false });
+    } catch (error) {
+      set({
+        error: error.response?.data?.message || "Failed to fetch prescriptions",
+        loading: false,
+      });
+    }
+  },
+
+  updatePrescriptions: async ({
+    medicines,
+    diagnosis,
+    notes,
+    prescriptionId,
+  }) => {
+    set({ loading: true, error: null });
+
+    try {
+      const res = await doctorInstance.put(`/prescription/${prescriptionId}`, {
+        medicines,
+        diagnosis,
+        notes,
+      });
+
+      set((state) => ({
+        prescriptions: state.prescriptions.map((p) =>
+          p._id === prescriptionId ? { ...p, ...res.data.prescription } : p
+        ),
+        loading: false,
+      }));
+
+      return true;
+    } catch (error) {
+      set({
+        error: error.response?.data?.message || "Failed to update prescription",
+        loading: false,
+      });
+      return false;
+    }
+  },
+
+  deletePrescriptions: async (prescriptionId) => {
+    set({ loading: true, error: null });
+
+    try {
+      await doctorInstance.delete(`/prescription/${prescriptionId}`);
+      set((state) => ({
+        prescriptions: state.prescriptions.filter(
+          (p) => p._id !== prescriptionId
+        ),
+        loading: false,
+      }));
+      return true;
+    } catch (error) {
+      set({
+        error: error.response?.data?.message || "Failed to delete prescription",
+        loading: false,
+      });
+      return false;
     }
   },
 }));
