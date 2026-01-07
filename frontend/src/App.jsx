@@ -17,7 +17,7 @@ import HistoryPage from "./pages/DoctorPages/HistoryPage.jsx";
 
 import ProtectedRoute from "./components/ProtectedRoute";
 import RoleBasedRoute from "./components/RoleBasedRoute";
-import RoleRedirect from "./pages/RoleRedirect.jsx";
+import RoleRedirect from "./components/RoleRedirect.jsx";
 
 function App() {
   const checkAuth = authStore((state) => state.checkAuth);
