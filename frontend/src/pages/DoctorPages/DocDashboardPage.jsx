@@ -191,8 +191,7 @@ export default function DocDashboardPage() {
 
                 <div className="space-y-3">
                   <ActionBtn icon={<Calendar />} label="Calendar" to="/doctor/calendar" />
-                  <ActionBtn icon={<History />} label="History" to="/doctor/history"/>
-                  <ActionBtn icon={<FileText />} label="Prescriptions" to="/doctor/prescriptions"/>
+                  <ActionBtn icon={<FileText />} label="History" to="/doctor/history"/>
                 </div>
               </div>
             </div>
