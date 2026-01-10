@@ -47,7 +47,7 @@ export const doctorStore = create((set) => ({
     }
   },
 
-  givePrescription: async ({ medicines, diagnosis, notes, appointmentId }) => {
+  givePrescription: async ({ medicines, diagnosis, notes, appointmentId,followUp }) => {
     set({ loading: true, error: null });
 
     try {
@@ -56,6 +56,7 @@ export const doctorStore = create((set) => ({
         medicines,
         diagnosis,
         notes,
+        followUp,
       });
       set({ loading: false });
       set({ prescription: res.data.prescription });
@@ -138,4 +139,28 @@ export const doctorStore = create((set) => ({
       return false;
     }
   },
+
+  rescheduleAppointments: async(appointmentId, date, time)=> {
+    try{
+      const res = await doctorInstance.put(`/reschedule/${appointmentId}`,{date,time});
+
+      const updatedAppointment = res.data.appointment;
+
+      set((state)=> ({
+        appointments: state.appointments.map((appt)=> 
+          appt._id === appointmentId ? updatedAppointment : appt
+        ),
+      }));
+
+      return true;
+    }
+    catch(error){
+       set({
+        error: error.response?.data?.message || "Failed to reschedule",
+        loading: false,
+      });
+      return false;
+    }
+  
+  }
 }));
