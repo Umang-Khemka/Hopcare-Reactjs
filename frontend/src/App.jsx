@@ -9,6 +9,7 @@ import UserProfilePage from "./pages/PatientPages/UserProfilePage.jsx";
 import PatientDashboard from "./pages/PatientPages/PatientDashboard.jsx";
 import FindDocPage from "./pages/PatientPages/FindDocPage.jsx";
 import AppointmentPage from "./pages/PatientPages/AppointmentPage.jsx";
+import PrescriptionPage from "./pages/PatientPages/PrescriptionsPage.jsx";
 
 import DocProfilePage from "./pages/DoctorPages/DocProfilePage.jsx";
 import DocDashboardPage from "./pages/DoctorPages/DocDashboardPage.jsx";
@@ -67,6 +68,17 @@ function App() {
             <ProtectedRoute>
               <RoleBasedRoute allowedRoles={["patient"]}>
                 <PatientDashboard />
+              </RoleBasedRoute>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/prescriptions/appointment/:appointmentId"
+          element={
+            <ProtectedRoute>
+              <RoleBasedRoute allowedRoles={["patient"]}>
+                <PrescriptionPage/>
               </RoleBasedRoute>
             </ProtectedRoute>
           }
