@@ -1,6 +1,7 @@
 import Prescription from "../models/prescription.model.js";
 import Appointment from "../models/appointment.model.js";
 import Doctor from "../models/doctor.model.js";
+import Patient from "../models/patient.model.js";
 
 export const getPrescriptions = async (req, res) => {
   try {
@@ -93,10 +94,9 @@ export const getPrescriptions = async (req, res) => {
   }
 };
 
-
 export const createPrescription = async (req, res) => {
   try {
-    const { appointmentId, medicines, diagnosis, notes } = req.body;
+    const { appointmentId, medicines, diagnosis, notes, followUp } = req.body;
     const doctorUserId = req.user._id;
 
     const doctor = await Doctor.findOne({ userId: doctorUserId });
@@ -130,6 +130,7 @@ export const createPrescription = async (req, res) => {
       medicines,
       diagnosis,
       notes,
+      followUp,
     });
 
     return res.status(201).json({
@@ -166,13 +167,14 @@ export const updatePrescription = async (req, res) => {
 
     const appointment = await Appointment.findById(prescription.appointmentId);
 
-    if(!appointment){
-      return res.status(404).json({message: "Appointmetn not found"});
+    if (!appointment) {
+      return res.status(404).json({ message: "Appointmetn not found" });
     }
 
-    if(appointment.status !== "completed"){
+    if (appointment.status !== "completed") {
       return res.status(400).json({
-        message: "Prescription cannot be edited as it is not completed by the patient"
+        message:
+          "Prescription cannot be edited as it is not completed by the patient",
       });
     }
 
@@ -220,6 +222,34 @@ export const deletePrescription = async (req, res) => {
     });
   } catch (error) {
     console.error("Error deleting prescription:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const getPrescriptionById = async (req, res) => {
+  try {
+    const { appointmentId  } = req.params;
+    const patientUserId = req.user._id;
+
+    const patient = await Patient.findOne({ userId: patientUserId });
+    if (!patient) {
+      return res.status(404).json({ message: "Patient profile not found" });
+    }
+
+    const prescription = await Prescription.findOne({ appointmentId });
+    if (!prescription) {
+      return res.status(404).json({ message: "Prescription not found" });
+    }
+
+    if (prescription.patientId.toString() !== patient._id.toString()) {
+      return res.status(403).json({ message: "The prescription is not yours" });
+    }
+
+    return res
+      .status(200)
+      .json({ message: "Prescription sent successfully", prescription });
+  } catch (error) {
+    console.log("Error fetching prescription:", error);
     res.status(500).json({ message: "Internal server error" });
   }
 };
