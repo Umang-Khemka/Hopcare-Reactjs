@@ -63,7 +63,7 @@ export default function AppointmentCard({ appointment }) {
           {status?.toLowerCase() === "completed" && (
             <div className="mt-4">
               <button
-                onClick={() => navigate(`/prescriptions/${appointment._id}`)}
+                onClick={() => navigate(`/prescriptions/appointment/${appointment._id}`)}
                 className="px-4 py-2 rounded-lg bg-gradient-to-r from-emerald-500 to-teal-500 text-white text-sm font-semibold hover:scale-[1.02] transition-all cursor-pointer ml-4"
               >
                 View Prescription
