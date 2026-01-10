@@ -12,6 +12,7 @@ export const patientStore = create((set) => ({
   prescriptions: [],
   patient: null,
   appointments: [],
+  prescription: null,
 
 
   getDoctors: async () => {
@@ -112,5 +113,27 @@ export const patientStore = create((set) => ({
         loading: false,
       });
     }
+  },
+  prescriptionById: async (appointmentId) => {
+  try {
+    set({ loading: true, error: null });
+    console.log(appointmentId);
+    const res = await patientInstance.get(`/prescription/appointment/${appointmentId}`);
+
+    set({
+      prescription: res.data.prescription,
+      loading: false,
+    });
+
+    return res.data.prescription;
+  } catch (error) {
+    set({
+      error:
+        error.response?.data?.message ||
+        "Failed to fetch prescription",
+      loading: false,
+    });
   }
+},
+
 }));
