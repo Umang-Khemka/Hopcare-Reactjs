@@ -42,13 +42,31 @@ export const getPatientHistory = async (req, res) => {
       .populate("appointmentId")
       .sort({ createdAt: -1 });
 
+    // Create a map of appointmentId to followUp date
+    const prescriptionMap = {};
+    prescriptions.forEach(prescription => {
+      if (prescription.appointmentId) {
+        prescriptionMap[prescription.appointmentId._id.toString()] = prescription.followUp;
+      }
+    });
+
+    // Merge followUp data into appointments
+    const appointmentsWithFollowUp = appointments.map(appointment => {
+      const apptObj = appointment.toObject();
+      const followUp = prescriptionMap[appointment._id.toString()];
+      return {
+        ...apptObj,
+        followUp: followUp || null,
+      };
+    });
+
     return res.status(200).json({
       patient: {
         name: patient.userId.name,
         age: patient.age,
         gender: patient.gender,
       },
-      appointments,
+      appointments: appointmentsWithFollowUp,
       prescriptions,
     });
   } catch (error) {
