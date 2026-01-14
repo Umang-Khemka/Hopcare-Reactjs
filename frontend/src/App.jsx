@@ -19,6 +19,7 @@ import HistoryPage from "./pages/DoctorPages/HistoryPage.jsx";
 import ProtectedRoute from "./components/ProtectedRoute";
 import RoleBasedRoute from "./components/RoleBasedRoute";
 import RoleRedirect from "./components/RoleRedirect.jsx";
+import ReviewPage from "./pages/PatientPages/ReviewPage.jsx";
 
 function App() {
   const checkAuth = authStore((state) => state.checkAuth);
@@ -79,6 +80,17 @@ function App() {
             <ProtectedRoute>
               <RoleBasedRoute allowedRoles={["patient"]}>
                 <PrescriptionPage/>
+              </RoleBasedRoute>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/appointments/:doctorId/review"
+          element={
+            <ProtectedRoute>
+              <RoleBasedRoute allowedRoles={["patient"]}>
+                <ReviewPage/>
               </RoleBasedRoute>
             </ProtectedRoute>
           }
