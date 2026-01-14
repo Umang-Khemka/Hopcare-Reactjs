@@ -17,31 +17,51 @@ import ActionBtn from "../../components/ui/ActioBrn.jsx";
 import StatCard from "../../components/ui/StatCard.jsx";
 import PrescriptionModal from "../../components/ui/PrescriptionModal.jsx";
 import { authStore } from "../../store/auth.store.js";
+import LoadingSpinner from "../../components/ui/LoadingSpinner.jsx";
+import useReviewStore from "../../store/review.store.js";
 
 export default function DocDashboardPage() {
   const [selectedAppointment, setSelectedAppointment] = useState(null);
+  const [filterRating, setFilteredRating] = useState("all");
   const { appointments, loading, error, getAllAppointments } = doctorStore();
   const { getDoctorProfile, doctorProfile, user } = authStore();
+  const {
+    reviews,
+    isLoading: reviewsLoading,
+    fetchDoctorReviews,
+  } = useReviewStore();
+
+  const filteredReviews =
+    filterRating === "all"
+      ? reviews
+      : reviews.filter((r) => r.ratings === Number(filterRating));
+
+  const recentReviews = filteredReviews.slice(0, 3);
 
   useEffect(() => {
     getAllAppointments();
     getDoctorProfile();
   }, []);
-  const today = new Date().toISOString().split("T")[0];
+
+  useEffect(() => {
+    fetchDoctorReviews();
+  }, []);
+
+  const today = new Date().toLocaleDateString("en-CA");
 
   const todayAppointments = appointments.filter(
     (appt) => appt.date === today && appt.status === "booked"
   );
 
-  if (loading)
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 via-blue-50/30 to-gray-50">
-        <div className="text-center">
-          <div className="w-16 h-16 border-4 border-[#0B5FA5] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-gray-600 font-medium">Loading appointments...</p>
-        </div>
-      </div>
-    );
+  const averageRating =
+    reviews.length === 0
+      ? 0
+      : (
+          reviews.reduce((sum, review) => sum + review.ratings, 0) /
+          reviews.length
+        ).toFixed(1);
+
+  if (loading) <LoadingSpinner />;
 
   if (error)
     return (
@@ -89,7 +109,7 @@ export default function DocDashboardPage() {
                     <Star className="w-6 h-6 text-white" />
                   </div>
                   <span className="text-4xl font-bold text-yellow-500">
-                    4.8
+                    {averageRating}
                   </span>
                 </div>
                 <h3 className="text-lg font-semibold text-gray-800">Rating</h3>
@@ -366,50 +386,46 @@ export default function DocDashboardPage() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {[
-                {
-                  name: "Ankit Verma",
-                  rating: 5,
-                  review:
-                    "Very attentive and explained everything clearly. Highly recommended.",
-                },
-                {
-                  name: "Priya Singh",
-                  rating: 5,
-                  review:
-                    "Excellent doctor with great diagnostic skills. Very satisfied with the treatment.",
-                },
-                {
-                  name: "Rajesh Kumar",
-                  rating: 5,
-                  review:
-                    "Professional and caring approach. The consultation was thorough and helpful.",
-                },
-              ].map((review, i) => (
-                <div
-                  key={i}
-                  className="group relative overflow-hidden bg-gradient-to-br from-gray-50 to-yellow-50/30 rounded-xl p-5 border border-gray-200 hover:border-yellow-300 hover:shadow-md transition-all duration-300"
-                >
-                  <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-yellow-400/10 to-transparent rounded-bl-full"></div>
-
-                  <div className="relative">
-                    <div className="flex items-center justify-between mb-3">
-                      <p className="font-bold text-gray-900">{review.name}</p>
-                      <div className="flex gap-0.5">
-                        {[...Array(review.rating)].map((_, j) => (
-                          <Star
-                            key={j}
-                            className="w-4 h-4 text-yellow-400 fill-yellow-400"
-                          />
-                        ))}
-                      </div>
-                    </div>
-                    <p className="text-sm text-gray-600 leading-relaxed">
-                      {review.review}
+              {reviewsLoading ? (
+                <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 via-blue-50/30 to-gray-50">
+                  <div className="text-center">
+                    <div className="w-16 h-16 border-4 border-[#0B5FA5] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+                    <p className="text-gray-600 font-medium">
+                      Loading reviews...
                     </p>
                   </div>
                 </div>
-              ))}
+              ) : recentReviews.length === 0 ? (
+                <p>No reviews</p>
+              ) : (
+                recentReviews.map((review, i) => (
+                  <div
+                    key={i}
+                    className="group relative overflow-hidden bg-gradient-to-br from-gray-50 to-yellow-50/30 rounded-xl p-5 border border-gray-200 hover:border-yellow-300 hover:shadow-md transition-all duration-300"
+                  >
+                    <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-yellow-400/10 to-transparent rounded-bl-full"></div>
+
+                    <div className="relative">
+                      <div className="flex items-center justify-between mb-3">
+                        <p className="font-bold text-gray-900">
+                          {review.patientId?.userId?.name}
+                        </p>
+                        <div className="flex gap-0.5">
+                          {[...Array(review.ratings)].map((_, j) => (
+                            <Star
+                              key={j}
+                              className="w-4 h-4 text-yellow-400 fill-yellow-400"
+                            />
+                          ))}
+                        </div>
+                      </div>
+                      <p className="text-sm text-gray-600 leading-relaxed">
+                        {review.comments}
+                      </p>
+                    </div>
+                  </div>
+                ))
+              )}
             </div>
           </div>
         </div>
