@@ -2,7 +2,6 @@ import Appointment from "../models/appointment.model.js";
 import Patient from "../models/patient.model.js";
 import Doctor from "../models/doctor.model.js";
 
-
 export const allAppointments = async (req, res) => {
   try {
     // logged-in doctor (User ID)
@@ -51,7 +50,6 @@ export const allAppointments = async (req, res) => {
   }
 };
 
-
 export const bookAppointment = async (req, res) => {
   const { doctorId, date, time, symptoms } = req.body;
 
@@ -62,8 +60,16 @@ export const bookAppointment = async (req, res) => {
     if (!patient) {
       return res.status(404).json({ message: "Profile not found" });
     }
-    
- 
+
+    const slotDateTime = new Date(`${date} ${time}`);
+    const now = new Date();
+
+    if (slotDateTime < now) {
+      return res.status(400).json({
+        message: "Cannot book a past time slot",
+      });
+    }
+
     const slot = await Appointment.create({
       doctorId,
       patientId: patient._id,
@@ -137,7 +143,7 @@ export const changeStatus = async (req, res) => {
       return res.status(400).json({ message: "Invalid status update value" });
     }
 
-    const doctor = await Doctor.findOne({userId: DoctorUserId });
+    const doctor = await Doctor.findOne({ userId: DoctorUserId });
     if (!doctor) {
       return res.status(400).json({ message: "Doctor profile not found" });
     }
@@ -253,7 +259,7 @@ export const getBookedSlots = async (req, res) => {
     const appointments = await Appointment.find({
       doctorId,
       date,
-      status: "booked",
+      status: { $in: ["booked", "completed"] },
     }).select("time");
 
     const bookedSlots = appointments.map((a) => a.time);
