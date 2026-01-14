@@ -77,6 +77,26 @@ const useReviewStore = create((set, get) => ({
       throw error;
     }
   },
+  // Fetch reviews for logged-in doctor
+fetchDoctorReviews: async () => {
+  set({ isLoading: true, error: null });
+  try {
+    const response = await reviewInstance.get("/all-reviews");
+
+    set({
+      reviews: response.data.reviews || [],
+      isLoading: false,
+    });
+
+    return response.data;
+  } catch (error) {
+    const errorMessage =
+      error.response?.data?.message || "Failed to fetch reviews";
+    set({ error: errorMessage, isLoading: false });
+    throw error;
+  }
+},
+
 
   // Set reviews
   setReviews: (reviews) => {
