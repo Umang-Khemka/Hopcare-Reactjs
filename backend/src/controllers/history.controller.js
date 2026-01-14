@@ -1,6 +1,7 @@
 import Patient from "../models/patient.model.js";
 import Appointment from "../models/appointment.model.js";
 import Prescription from "../models/prescription.model.js";
+import Review from "../models/review.model.js";
 
 export const getPatientHistory = async (req, res) => {
   try {
@@ -42,21 +43,42 @@ export const getPatientHistory = async (req, res) => {
       .populate("appointmentId")
       .sort({ createdAt: -1 });
 
-    // Create a map of appointmentId to followUp date
+    const reviews = await Review.find({
+      patientId: patient._id,
+    });
+
+    /* -------------------- Maps -------------------- */
+
+    // appointmentId -> followUp
     const prescriptionMap = {};
-    prescriptions.forEach(prescription => {
-      if (prescription.appointmentId) {
-        prescriptionMap[prescription.appointmentId._id.toString()] = prescription.followUp;
+    prescriptions.forEach((p) => {
+      if (p.appointmentId) {
+        prescriptionMap[p.appointmentId._id.toString()] = p.followUp;
       }
     });
 
-    // Merge followUp data into appointments
-    const appointmentsWithFollowUp = appointments.map(appointment => {
+    // appointmentId -> review
+    const reviewMap = {};
+    reviews.forEach((r) => {
+      reviewMap[r.appointmentId.toString()] = {
+        _id: r._id,
+        ratings: r.ratings,
+        comments: r.comments,
+        createdAt: r.createdAt,
+      };
+    });
+
+    /* ---------------- Merge Data ---------------- */
+
+    const appointmentsWithExtras = appointments.map((appointment) => {
       const apptObj = appointment.toObject();
-      const followUp = prescriptionMap[appointment._id.toString()];
+      const apptId = appointment._id.toString();
+
       return {
         ...apptObj,
-        followUp: followUp || null,
+        followUp: prescriptionMap[apptId] || null,
+        hasReview: !!reviewMap[apptId],
+        review: reviewMap[apptId] || null,
       };
     });
 
@@ -66,7 +88,7 @@ export const getPatientHistory = async (req, res) => {
         age: patient.age,
         gender: patient.gender,
       },
-      appointments: appointmentsWithFollowUp,
+      appointments: appointmentsWithExtras,
       prescriptions,
     });
   } catch (error) {
