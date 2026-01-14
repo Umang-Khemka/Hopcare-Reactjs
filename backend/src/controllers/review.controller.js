@@ -15,9 +15,7 @@ export const createReview = async (req, res) => {
 
     const doctor = await Doctor.findById(doctorId);
     if (!doctor) {
-      return res
-        .status(400)
-        .json({ message: "Doctor profile does not exist" });
+      return res.status(400).json({ message: "Doctor profile does not exist" });
     }
 
     // Check if appointment exists and belongs to this patient
@@ -46,7 +44,8 @@ export const createReview = async (req, res) => {
 
     if (existingReview) {
       return res.status(400).json({
-        message: "You have already reviewed this appointment. You can edit it instead.",
+        message:
+          "You have already reviewed this appointment. You can edit it instead.",
       });
     }
 
@@ -171,6 +170,44 @@ export const deleteReview = async (req, res) => {
     });
   } catch (error) {
     console.error(error);
+    return res.status(500).json({
+      message: "Internal server error",
+    });
+  }
+};
+
+export const getReviewById = async (req, res) => {
+  try {
+    const userId = req.user._id;
+
+    const doctor = await Doctor.findOne({ userId });
+    if (!doctor) {
+      return res.status(404).json({
+        message: "Doctor profile not found",
+      });
+    }
+
+    const reviews = await Review.find({ doctorId: doctor._id })
+      .populate({
+        path: "patientId",
+        populate: {
+          path: "userId",
+          select: "name email",
+        },
+      })
+      .populate({
+        path: "appointmentId",
+        select: "date time",
+      })
+      .sort({ createdAt: -1 });
+
+    return res.status(200).json({
+      message: "Reviews fetched successfully",
+      count: reviews.length,
+      reviews,
+    });
+  } catch (error) {
+    console.error("Get reviews error:", error);
     return res.status(500).json({
       message: "Internal server error",
     });
