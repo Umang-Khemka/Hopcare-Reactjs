@@ -44,6 +44,14 @@ export default function AppointmentPage() {
     return `${y}-${m}-${d}`;
   };
 
+  const isPastSlot = (slot) => {
+    if (!selectedDate) return false;
+
+    const slotDateTime = new Date(`${formatDateLocal(selectedDate)} ${slot}`);
+
+    return slotDateTime < new Date();
+  };
+
   useEffect(() => {
     if (!doctorId || !selectedDate) return;
     const date = formatDateLocal(selectedDate);
@@ -93,16 +101,18 @@ export default function AppointmentPage() {
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
         {slots.map((slot) => {
           const isBooked = bookedSlots.includes(slot);
+          const isPast = isPastSlot(slot);
+          const isDisabled = isBooked || isPast;
           const isSelected = selectedSlot === slot;
           return (
             <button
               key={slot}
-              disabled={isBooked}
-              onClick={() => setSelectedSlot(slot)}
+              disabled={isDisabled}
+              onClick={() => !isDisabled && setSelectedSlot(slot)}
               className={`
                 relative py-3 rounded-xl border-2 text-sm transition-all font-semibold
                 ${
-                  isBooked
+                  isDisabled
                     ? "bg-gray-100 text-gray-400 cursor-not-allowed border-gray-200"
                     : isSelected
                     ? variant === "morning"
@@ -117,6 +127,12 @@ export default function AppointmentPage() {
               {isBooked && (
                 <div className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] px-1.5 py-0.5 rounded-full font-bold">
                   Booked
+                </div>
+              )}
+
+              {!isBooked && isPast && (
+                <div className="absolute -top-1 -right-1 bg-gray-500 text-white text-[10px] px-1.5 py-0.5 rounded-full font-bold">
+                  Passed
                 </div>
               )}
             </button>
