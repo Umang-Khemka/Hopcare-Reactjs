@@ -146,7 +146,7 @@ export const createPrescription = async (req, res) => {
 export const updatePrescription = async (req, res) => {
   try {
     const { prescriptionId } = req.params;
-    const { medicines, diagnosis, notes } = req.body;
+    const { medicines, diagnosis, notes,followUp } = req.body;
     const doctorUserId = req.user._id;
 
     const doctor = await Doctor.findOne({ userId: doctorUserId });
@@ -181,6 +181,7 @@ export const updatePrescription = async (req, res) => {
     if (medicines) prescription.medicines = medicines;
     if (diagnosis) prescription.diagnosis = diagnosis;
     if (notes) prescription.notes = notes;
+    if(followUp) prescription.followUp = followUp;
 
     await prescription.save();
 
@@ -228,7 +229,7 @@ export const deletePrescription = async (req, res) => {
 
 export const getPrescriptionById = async (req, res) => {
   try {
-    const { appointmentId  } = req.params;
+    const { appointmentId } = req.params;
     const patientUserId = req.user._id;
 
     const patient = await Patient.findOne({ userId: patientUserId });
@@ -236,12 +237,28 @@ export const getPrescriptionById = async (req, res) => {
       return res.status(404).json({ message: "Patient profile not found" });
     }
 
-    const prescription = await Prescription.findOne({ appointmentId });
+    const prescription = await Prescription.findOne({ appointmentId })
+      .populate({
+        path: "patientId",
+        populate: {
+          path: "userId",
+          select: "name email"
+        }
+      })
+      .populate({
+        path: "doctorId",
+        populate: {
+          path: "userId",
+          select: "name email"
+        }
+      })
+      .populate("appointmentId");
+
     if (!prescription) {
       return res.status(404).json({ message: "Prescription not found" });
     }
 
-    if (prescription.patientId.toString() !== patient._id.toString()) {
+    if (prescription.patientId._id.toString() !== patient._id.toString()) {
       return res.status(403).json({ message: "The prescription is not yours" });
     }
 
