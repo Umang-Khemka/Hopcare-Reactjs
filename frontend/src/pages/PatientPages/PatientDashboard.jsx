@@ -13,6 +13,7 @@ import {
   Search,
   Filter,
 } from "lucide-react";
+import LoadingSpinner from "../../components/ui/LoadingSpinner.jsx";
 
 export default function PatientDashboard() {
   const { patient, appointments, loading, error, patientHistory } =
@@ -58,12 +59,7 @@ export default function PatientDashboard() {
             <Navbar />
           </div>
         </section>
-        <div className="flex items-center justify-center py-20">
-          <div className="text-center">
-            <div className="w-16 h-16 border-4 border-[#0B5FA5] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-            <p className="text-gray-600 font-medium">Loading appointments...</p>
-          </div>
-        </div>
+        <LoadingSpinner/>
       </div>
     );
   }
