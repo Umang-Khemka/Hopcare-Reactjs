@@ -92,14 +92,16 @@ export const doctorStore = create((set) => ({
     diagnosis,
     notes,
     prescriptionId,
+    followUp,
   }) => {
     set({ loading: true, error: null });
-
+    console.log(followUp);
     try {
       const res = await doctorInstance.put(`/prescription/${prescriptionId}`, {
         medicines,
         diagnosis,
         notes,
+        followUp,
       });
 
       set((state) => ({
