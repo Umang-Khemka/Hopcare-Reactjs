@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const patientInstance = axios.create({
+const doctorInstance = axios.create({
     baseURL:
         import.meta.env.MODE === "development"
             ? "http://localhost:8000/api/v1/doctor"
@@ -11,4 +11,4 @@ const patientInstance = axios.create({
         },
 });
 
-export default patientInstance;
+export default doctorInstance;
