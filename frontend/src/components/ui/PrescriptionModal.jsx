@@ -56,7 +56,7 @@ export default function PrescriptionModal({ appointment, onClose }) {
         medicines,
         diagnosis,
         notes,
-        followUpDate,
+        followUp: followUpDate,
       });
 
       await changeAppointmentStatus({
