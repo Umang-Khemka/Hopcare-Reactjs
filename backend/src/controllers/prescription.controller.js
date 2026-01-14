@@ -78,6 +78,9 @@ export const getPrescriptions = async (req, res) => {
           "patient.password": 0,
         },
       },
+      {
+        $sort: { createdAt: -1 },
+      },
     ]);
 
     return res.status(200).json({
@@ -146,7 +149,7 @@ export const createPrescription = async (req, res) => {
 export const updatePrescription = async (req, res) => {
   try {
     const { prescriptionId } = req.params;
-    const { medicines, diagnosis, notes,followUp } = req.body;
+    const { medicines, diagnosis, notes, followUp } = req.body;
     const doctorUserId = req.user._id;
 
     const doctor = await Doctor.findOne({ userId: doctorUserId });
@@ -181,7 +184,7 @@ export const updatePrescription = async (req, res) => {
     if (medicines) prescription.medicines = medicines;
     if (diagnosis) prescription.diagnosis = diagnosis;
     if (notes) prescription.notes = notes;
-    if(followUp) prescription.followUp = followUp;
+    if (followUp) prescription.followUp = followUp;
 
     await prescription.save();
 
@@ -242,15 +245,15 @@ export const getPrescriptionById = async (req, res) => {
         path: "patientId",
         populate: {
           path: "userId",
-          select: "name email"
-        }
+          select: "name email",
+        },
       })
       .populate({
         path: "doctorId",
         populate: {
           path: "userId",
-          select: "name email"
-        }
+          select: "name email",
+        },
       })
       .populate("appointmentId");
 
