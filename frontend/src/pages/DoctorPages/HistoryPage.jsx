@@ -31,6 +31,7 @@ export default function HistoryPage() {
   const [formData, setFormData] = useState({
     diagnosis: "",
     notes: "",
+    followUpDate: "",
     medicines: [],
   });
   const [searchQuery, setSearchQuery] = useState("");
@@ -79,6 +80,7 @@ export default function HistoryPage() {
     setFormData({
       diagnosis: p.diagnosis || "",
       notes: p.notes || "",
+      followUpDate: p.followUp || "",
       medicines: p.medicines.map((m) => ({ ...m })),
     });
   };
@@ -94,6 +96,7 @@ export default function HistoryPage() {
       prescriptionId: id,
       diagnosis: formData.diagnosis,
       notes: formData.notes,
+      followUp: formData.followUpDate,
       medicines: formData.medicines,
     });
     if (success) setEditingId(null);
@@ -226,6 +229,24 @@ export default function HistoryPage() {
 
                         <div>
                           <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
+                            <Calendar className="w-4 h-4 text-[#0B5FA5]" />
+                            Follow Up Date
+                          </label>
+                          <input
+                            type="date"
+                            value={formData.followUpDate}
+                            onChange={(e) =>
+                              setFormData((prev) => ({
+                                ...prev,
+                                followUpDate: e.target.value,
+                              }))
+                            }
+                            className="w-full border-2 border-gray-200 focus:border-[#0B5FA5] focus:outline-none rounded-xl p-3 transition-colors"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
                             <Pill className="w-4 h-4 text-[#0B5FA5]" />
                             Medicines
                           </label>
@@ -350,6 +371,18 @@ export default function HistoryPage() {
                             {p.diagnosis || "—"}
                           </p>
                         </div>
+
+                        {p.followUp && (
+                          <div>
+                            <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
+                              <Calendar className="w-4 h-4 text-[#0B5FA5]" />
+                              Follow Up Date
+                            </label>
+                            <p className="text-gray-800 bg-gray-50 rounded-lg p-3">
+                              {p.followUp}
+                            </p>
+                          </div>
+                        )}
 
                         <div>
                           <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-3">
