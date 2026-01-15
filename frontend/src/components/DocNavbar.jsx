@@ -2,12 +2,14 @@ import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { authStore } from "../store/auth.store";
 import { Stethoscope } from "lucide-react";
+import toast from "react-hot-toast";
 
 export default function DocNavbar() {
   const navigate = useNavigate();
   const { logout } = authStore();
 
   const handleLogout = async () => {
+    toast.success("Logged out successfully");
     await logout();
     navigate("/auth");
   };

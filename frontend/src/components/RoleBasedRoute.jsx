@@ -1,5 +1,6 @@
 import { Navigate } from "react-router-dom";
 import { authStore } from "../store/auth.store.js";
+import toast from "react-hot-toast";
 
 
 const RoleBasedRoute = ({children, allowedRoles})=> {
@@ -16,6 +17,7 @@ const RoleBasedRoute = ({children, allowedRoles})=> {
   }
 
   if (!isAuthenticated) {
+    toast.error("Session expired login again");
     return <Navigate to="/auth" replace />;
   }
 

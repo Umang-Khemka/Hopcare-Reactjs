@@ -9,6 +9,7 @@ import {
   Trash2,
 } from "lucide-react";
 import useReviewStore from "../../store/review.store";
+import toast from "react-hot-toast";
 
 export default function ReviewModal({
   isOpen,
@@ -56,6 +57,7 @@ export default function ReviewModal({
     e.preventDefault();
 
     if (rating === 0 || comments.trim().length < 10) {
+      toast.warning("Please give a rating and minimum of 10 char");
       return;
     }
 
@@ -67,6 +69,11 @@ export default function ReviewModal({
         result = await createReview(doctorId, appointmentId, rating, comments);
       }
       setSuccess(true);
+      toast.success(
+        isEditing
+          ? "Review updated successfully"
+          : "Review submitted successfully"
+      );
       setTimeout(() => {
         onClose();
         if (onReviewSubmitted) {
@@ -88,6 +95,7 @@ export default function ReviewModal({
           onReviewSubmitted(null);
         }
       }, 1500);
+      toast.success("Review deleted successfully");
     } catch (err) {
       console.error("Failed to delete review:", err);
     }

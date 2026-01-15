@@ -10,6 +10,7 @@ import {
   User,
   AlertCircle,
 } from "lucide-react";
+import toast from "react-hot-toast";
 
 export default function PrescriptionModal({ appointment, onClose }) {
   const { givePrescription, changeAppointmentStatus, loading } = doctorStore();
@@ -21,7 +22,6 @@ export default function PrescriptionModal({ appointment, onClose }) {
     { name: "", dosage: "", duration: "", instructions: "" },
   ]);
 
-  // ➕ Add medicine row
   const addMedicine = () => {
     setMedicines([
       ...medicines,
@@ -29,7 +29,6 @@ export default function PrescriptionModal({ appointment, onClose }) {
     ]);
   };
 
-  // ❌ Remove medicine row
   const removeMedicine = (index) => {
     if (medicines.length === 1) return; // keep at least one
     setMedicines(medicines.filter((_, i) => i !== index));
@@ -45,7 +44,7 @@ export default function PrescriptionModal({ appointment, onClose }) {
     // basic validation
     for (const med of medicines) {
       if (!med.name || !med.dosage || !med.duration) {
-        alert("Please fill all medicine fields");
+        toast.error("Please fill all medicine fields");
         return;
       }
     }
@@ -64,7 +63,7 @@ export default function PrescriptionModal({ appointment, onClose }) {
         status: "completed",
       });
 
-      alert("Prescription saved & appointment completed");
+      toast.success("Prescription saved & appointment completed");
       onClose();
     } catch (err) {
       alert(err.response?.data?.message || "Error saving prescription");

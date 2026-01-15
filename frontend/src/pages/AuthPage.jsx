@@ -2,6 +2,7 @@ import { useState } from "react";
 import { User, Stethoscope, ShieldCheck, CalendarCheck } from "lucide-react";
 import { authStore } from "../store/auth.store.js";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 export default function AuthPage() {
   const { register, login, loading, error } = authStore();
@@ -29,21 +30,25 @@ export default function AuthPage() {
         formData.password,
         role
       );
-      if(success){
-        if(role === "patient"){
-            navigate("/my-profile");
+      if (success) {
+        if (role === "patient") {
+          navigate("/my-profile");
+          toast.success("Registered successfully complete the personal info");
         } else {
-            navigate("/doc-profile");
+          navigate("/doc-profile");
+          toast.success("Registered successfully complete the personal info");
         }
       }
     } else {
       success = await login(formData.email, formData.password);
-      if(success){
+      if (success) {
         const user = authStore.getState().user;
-        if(user.role === "patient"){
-            navigate("/");
+        if (user.role === "patient") {
+          toast.success("Logged in successfully");
+          navigate("/");
         } else {
-            navigate("/doc-dashboard");
+          toast.success("Logged in successfully");
+          navigate("/doc-dashboard");
         }
       }
     }

@@ -1,5 +1,6 @@
 import { Navigate, Outlet } from "react-router-dom";
 import { authStore } from "../store/auth.store.js";
+import toast from "react-hot-toast";
 
 export default function ProtectedRoute({ children }) {
   const isAuthenticated = authStore((state) => state.isAuthenticated);
@@ -14,6 +15,7 @@ export default function ProtectedRoute({ children }) {
   }
 
   if (!isAuthenticated) {
+    toast.error("Session expired login again");
     return <Navigate to="/auth" replace />;
   }
 
