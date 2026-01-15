@@ -17,6 +17,8 @@ import {
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import Footer from "../../components/Footer";
+import LoadingSpinner from "../../components/ui/LoadingSpinner";
+import ErrorPage from "../../components/ui/errorPage";
 
 const fallbackDescriptions = [
   "As a psychologist, Dr. has practiced for over 7 years, helping patients overcome mental health challenges with personalized therapies.",
@@ -25,7 +27,7 @@ const fallbackDescriptions = [
 ];
 
 export default function FindDocPage() {
-  const { getDoctors, doctors, totalCount, loading } = patientStore();
+  const { getDoctors, doctors, totalCount, loading,error } = patientStore();
   const { isAuthenticated } = authStore();
   const [search, setSearch] = useState("");
   const [selectedSpecialization, setSelectedSpecialization] = useState("All");
@@ -57,7 +59,9 @@ export default function FindDocPage() {
       : filteredDoctors.filter(
           (doc) => doc.specialization === selectedSpecialization
         );
-
+    
+  if(loading) return <LoadingSpinner/>
+  if(error) return <ErrorPage error={error}/>
   return (
     <>
       {/* Navbar */}

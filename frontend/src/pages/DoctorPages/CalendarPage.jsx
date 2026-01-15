@@ -7,10 +7,18 @@ import { doctorStore } from "../../store/doctor.store.js";
 import DocNavbar from "../../components/DocNavbar.jsx";
 import Modal from "../../components/ui/Modal.jsx";
 import { Calendar, Users, CheckCircle, XCircle } from "lucide-react";
+import LoadingSpinner from "../../components/ui/LoadingSpinner.jsx";
+import ErrorPage from "../../components/ui/errorPage.jsx";
+import toast from "react-hot-toast";
 
 export default function CalendarPage() {
-  const { appointments, getAllAppointments, rescheduleAppointments } =
-    doctorStore();
+  const {
+    appointments,
+    getAllAppointments,
+    rescheduleAppointments,
+    loading,
+    error,
+  } = doctorStore();
 
   const [selectedAppointment, setSelectedAppointment] = useState(null);
   const [appointmentCache, setAppointmentCache] = useState({});
@@ -88,12 +96,14 @@ export default function CalendarPage() {
     const date = start.toISOString().split("T")[0];
     const time = start.toTimeString().slice(0, 5);
 
+    toast.loading("Rescheduling appointment...");
+
     const success = await rescheduleAppointments(appointmentId, date, time);
     if (!success) {
-      alert("Error in rescheduling");
+      toast.error("Error in rescheduling");
       info.revert();
     } else {
-      // Refresh appointments to sync with backend
+      toast.success("Appointment rescheduled successfully");
       await getAllAppointments();
     }
   };
@@ -139,6 +149,10 @@ export default function CalendarPage() {
       time,
     });
   };
+
+  if (loading) return <LoadingSpinner />;
+
+  if (error) return <ErrorPage error={error} />;
 
   return (
     <div className="min-h-screen font-sans bg-gradient-to-br from-gray-50 via-blue-50/30 to-gray-50">

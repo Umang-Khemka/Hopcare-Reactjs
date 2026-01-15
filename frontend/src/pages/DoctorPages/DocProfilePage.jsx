@@ -15,6 +15,9 @@ import {
   Shield,
 } from "lucide-react";
 import DocNavbar from "../../components/DocNavbar.jsx";
+import LoadingSpinner from "../../components/ui/LoadingSpinner.jsx";
+import ErrorPage from "../../components/ui/errorPage.jsx";
+import toast from "react-hot-toast";
 
 export default function DoctorProfilePage() {
   const {
@@ -23,6 +26,7 @@ export default function DoctorProfilePage() {
     loading,
     user,
     doctorProfile,
+    error,
   } = authStore();
 
   const [isEditing, setIsEditing] = useState(false);
@@ -54,21 +58,15 @@ export default function DoctorProfilePage() {
     try {
       await updateDoctorProfile(formData);
       setIsEditing(false);
-      alert("Profile Updated Successfully");
+      toast.success("Profile Updated Successfully");
     } catch {
-      alert("Profile not updated");
+      toast.error("Profile not updated");
     }
   };
 
-  if (loading)
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 via-blue-50/30 to-gray-50">
-        <div className="text-center">
-          <div className="w-16 h-16 border-4 border-[#0B5FA5] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-gray-600 font-medium">Loading profile...</p>
-        </div>
-      </div>
-    );
+  if (loading) return <LoadingSpinner />;
+
+  if (error) return <ErrorPage error={error} />;
 
   return (
     <>

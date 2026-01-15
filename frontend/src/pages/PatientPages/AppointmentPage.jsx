@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { DayPicker } from "react-day-picker";
 import "react-day-picker/dist/style.css";
+import toast from "react-hot-toast";
 
 import { patientStore } from "../../store/patient.store";
 import { authStore } from "../../store/auth.store";
@@ -19,6 +20,8 @@ import {
   Sunset,
   CheckCircle,
 } from "lucide-react";
+import LoadingSpinner from "../../components/ui/LoadingSpinner.jsx";
+import ErrorPage from "../../components/ui/errorPage.jsx";
 
 export default function AppointmentPage() {
   const [searchParams] = useSearchParams();
@@ -65,7 +68,7 @@ export default function AppointmentPage() {
 
   const handleBooking = async () => {
     if (!selectedDate || !selectedSlot || !symptoms) {
-      alert("Please select date, time and symptoms");
+      toast.error("Please select date, time and symptoms");
       return;
     }
     const date = formatDateLocal(selectedDate);
@@ -76,13 +79,17 @@ export default function AppointmentPage() {
       symptoms,
     });
     if (success) {
-      alert("Appointment booked successfully");
+      toast.success("Appointment booked successfully");
       setSelectedSlot("");
       setSymptoms("");
       allSlots({ doctorId, date });
       navigate("/patient-dashboard");
     }
   };
+
+  if (loading) return <LoadingSpinner />;
+
+  if (error) return <ErrorPage error={error} />;
 
   const SlotSection = ({ title, slots, variant, icon: Icon }) => (
     <div className="mb-6">
@@ -127,12 +134,6 @@ export default function AppointmentPage() {
               {isBooked && (
                 <div className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] px-1.5 py-0.5 rounded-full font-bold">
                   Booked
-                </div>
-              )}
-
-              {!isBooked && isPast && (
-                <div className="absolute -top-1 -right-1 bg-gray-500 text-white text-[10px] px-1.5 py-0.5 rounded-full font-bold">
-                  Passed
                 </div>
               )}
             </button>
@@ -374,7 +375,12 @@ export default function AppointmentPage() {
                       Date
                     </p>
                     <p className="text-sm font-bold text-gray-900">
-                      {selectedDate.toLocaleDateString()}
+                      {selectedDate.toLocaleDateString("en-IN", {
+                        weekday: "short",
+                        day: "2-digit",
+                        month: "short",
+                        year: "numeric",
+                      })}
                     </p>
                   </div>
                 )}

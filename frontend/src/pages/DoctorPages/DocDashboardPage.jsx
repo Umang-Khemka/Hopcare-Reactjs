@@ -19,6 +19,7 @@ import PrescriptionModal from "../../components/ui/PrescriptionModal.jsx";
 import { authStore } from "../../store/auth.store.js";
 import LoadingSpinner from "../../components/ui/LoadingSpinner.jsx";
 import useReviewStore from "../../store/review.store.js";
+import ErrorPage from "../../components/ui/errorPage.jsx";
 
 export default function DocDashboardPage() {
   const [selectedAppointment, setSelectedAppointment] = useState(null);
@@ -61,16 +62,9 @@ export default function DocDashboardPage() {
           reviews.length
         ).toFixed(1);
 
-  if (loading) <LoadingSpinner />;
+  if (loading) return <LoadingSpinner />;
 
-  if (error)
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 via-blue-50/30 to-gray-50">
-        <div className="bg-red-50 border border-red-200 rounded-xl p-6 max-w-md">
-          <p className="text-red-700 font-medium">{error}</p>
-        </div>
-      </div>
-    );
+  if (error) return <ErrorPage error={error}/>
 
   return (
     <>

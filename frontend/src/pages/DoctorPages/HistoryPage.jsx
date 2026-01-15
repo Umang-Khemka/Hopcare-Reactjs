@@ -16,6 +16,9 @@ import {
   AlertCircle,
 } from "lucide-react";
 import DocNavbar from "../../components/DocNavbar.jsx";
+import LoadingSpinner from "../../components/ui/LoadingSpinner.jsx";
+import ErrorPage from "../../components/ui/errorPage.jsx";
+import toast from "react-hot-toast";
 
 export default function HistoryPage() {
   const {
@@ -47,24 +50,9 @@ export default function HistoryPage() {
     getAllPrescriptions();
   }, []);
 
-  if (loading)
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 via-blue-50/30 to-gray-50">
-        <div className="text-center">
-          <div className="w-16 h-16 border-4 border-[#0B5FA5] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-gray-600 font-medium">Loading prescriptions...</p>
-        </div>
-      </div>
-    );
+  if (loading) return <LoadingSpinner/>
 
-  if (error)
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 via-blue-50/30 to-gray-50">
-        <div className="bg-red-50 border border-red-200 rounded-xl p-6 max-w-md">
-          <p className="text-red-700 font-medium">{error}</p>
-        </div>
-      </div>
-    );
+  if (error) return <ErrorPage error={error}/>
 
   const filteredPrescriptions = prescriptions.filter((p) => {
     const query = searchQuery.toLowerCase();
@@ -99,7 +87,10 @@ export default function HistoryPage() {
       followUp: formData.followUpDate,
       medicines: formData.medicines,
     });
-    if (success) setEditingId(null);
+    if (success) {
+      setEditingId(null);
+      toast.success("Prescription updated successfully");
+    }
   };
 
   const handleCancel = () => setEditingId(null);
