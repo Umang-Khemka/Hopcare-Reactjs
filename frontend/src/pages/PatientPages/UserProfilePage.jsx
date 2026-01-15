@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import Navbar from "../../components/Navbar.jsx";
 import Footer from "../../components/Footer.jsx";
+import toast from "react-hot-toast";
 
 export default function UserProfilePage() {
   const {
@@ -66,9 +67,9 @@ export default function UserProfilePage() {
     try {
       await updatePatientProfile(formData);
       setIsEditing(false);
-      alert("Profile Updated Successfully");
+      toast.success("Profile updated successfully");
     } catch {
-      alert("Profile not updated");
+      toast.error("Profile not updated");
     }
   };
 
@@ -103,7 +104,9 @@ export default function UserProfilePage() {
             </div>
 
             <div>
-              <h2 className="text-xl font-semibold">{user?.name || "John Anderson"}</h2>
+              <h2 className="text-xl font-semibold">
+                {user?.name || "John Anderson"}
+              </h2>
               <p className="text-gray-500 flex items-center gap-2">
                 <Mail className="w-4 h-4" /> {user?.email}
               </p>
@@ -145,7 +148,9 @@ export default function UserProfilePage() {
             >
               {/* Name */}
               <div className="flex flex-col">
-                <label className="mb-1 font-medium text-gray-700">Full Name</label>
+                <label className="mb-1 font-medium text-gray-700">
+                  Full Name
+                </label>
                 <input
                   disabled
                   className={`rounded-lg px-4 py-3 transition ${
@@ -159,7 +164,9 @@ export default function UserProfilePage() {
 
               {/* Email */}
               <div className="flex flex-col">
-                <label className="mb-1 font-medium text-gray-700">Email Address</label>
+                <label className="mb-1 font-medium text-gray-700">
+                  Email Address
+                </label>
                 <input
                   disabled
                   className={`rounded-lg px-4 py-3 transition ${
@@ -183,7 +190,9 @@ export default function UserProfilePage() {
                       : "border border-transparent bg-gray-100 text-gray-600 cursor-not-allowed"
                   }`}
                   value={formData.age}
-                  onChange={(e) => setFormData({ ...formData, age: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, age: e.target.value })
+                  }
                 />
               </div>
 
@@ -215,7 +224,9 @@ export default function UserProfilePage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {/* Height */}
               <div className="flex flex-col">
-                <label className="mb-1 font-medium text-gray-700">Height (cm)</label>
+                <label className="mb-1 font-medium text-gray-700">
+                  Height (cm)
+                </label>
                 <input
                   type="number"
                   disabled={!isEditing}
@@ -225,13 +236,17 @@ export default function UserProfilePage() {
                       : "border border-transparent bg-gray-100 text-gray-600 cursor-not-allowed"
                   }`}
                   value={formData.height}
-                  onChange={(e) => setFormData({ ...formData, height: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, height: e.target.value })
+                  }
                 />
               </div>
 
               {/* Weight */}
               <div className="flex flex-col">
-                <label className="mb-1 font-medium text-gray-700">Weight (kg)</label>
+                <label className="mb-1 font-medium text-gray-700">
+                  Weight (kg)
+                </label>
                 <input
                   type="number"
                   disabled={!isEditing}
@@ -241,7 +256,9 @@ export default function UserProfilePage() {
                       : "border border-transparent bg-gray-100 text-gray-600 cursor-not-allowed"
                   }`}
                   value={formData.weight}
-                  onChange={(e) => setFormData({ ...formData, weight: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, weight: e.target.value })
+                  }
                 />
               </div>
             </div>
@@ -250,10 +267,14 @@ export default function UserProfilePage() {
             <div className="mt-4 bg-gray-50 p-4 rounded-lg flex justify-between items-center">
               <div>
                 <p className="text-sm text-gray-500">Body Mass Index (BMI)</p>
-                <p className="text-2xl font-bold text-teal-600">{bmi || "--"}</p>
+                <p className="text-2xl font-bold text-teal-600">
+                  {bmi || "--"}
+                </p>
               </div>
               {bmi && (
-                <span className="px-3 py-1 bg-gray-200 rounded-full text-sm">{bmiStatus}</span>
+                <span className="px-3 py-1 bg-gray-200 rounded-full text-sm">
+                  {bmiStatus}
+                </span>
               )}
             </div>
           </div>
@@ -261,7 +282,8 @@ export default function UserProfilePage() {
           {/* Medical Information */}
           <div className="bg-white rounded-2xl shadow p-6">
             <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-              <HeartPulse className="w-5 h-5 text-teal-500" /> Medical Information
+              <HeartPulse className="w-5 h-5 text-teal-500" /> Medical
+              Information
             </h3>
 
             <div className="flex gap-2 mb-4">
