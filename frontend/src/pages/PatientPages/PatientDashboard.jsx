@@ -14,6 +14,7 @@ import {
   Filter,
 } from "lucide-react";
 import LoadingSpinner from "../../components/ui/LoadingSpinner.jsx";
+import ErrorPage from "../../components/ui/errorPage.jsx";
 
 export default function PatientDashboard() {
   const { patient, appointments, loading, error, patientHistory } =
@@ -72,11 +73,7 @@ export default function PatientDashboard() {
             <Navbar />
           </div>
         </section>
-        <div className="flex items-center justify-center py-20">
-          <div className="bg-red-50 border border-red-200 rounded-xl p-6 max-w-md">
-            <p className="text-red-700 font-medium">{error}</p>
-          </div>
-        </div>
+        <ErrorPage/>
       </div>
     );
   }
