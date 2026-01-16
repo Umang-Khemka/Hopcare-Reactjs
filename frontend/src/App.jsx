@@ -19,6 +19,7 @@ import HistoryPage from "./pages/DoctorPages/HistoryPage.jsx";
 import ProtectedRoute from "./components/ProtectedRoute";
 import RoleBasedRoute from "./components/RoleBasedRoute";
 import RoleRedirect from "./components/RoleRedirect.jsx";
+import PatientHistory from "./pages/DoctorPages/PatientHistory.jsx";
 
 function App() {
   const checkAuth = authStore((state) => state.checkAuth);
@@ -78,7 +79,7 @@ function App() {
           element={
             <ProtectedRoute>
               <RoleBasedRoute allowedRoles={["patient"]}>
-                <PrescriptionPage/>
+                <PrescriptionPage />
               </RoleBasedRoute>
             </ProtectedRoute>
           }
@@ -123,6 +124,17 @@ function App() {
             <ProtectedRoute>
               <RoleBasedRoute allowedRoles={["doctor"]}>
                 <CalendarPage />
+              </RoleBasedRoute>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/patient-history/:patientId"
+          element={
+            <ProtectedRoute>
+              <RoleBasedRoute allowedRoles={["doctor"]}>
+                <PatientHistory/>
               </RoleBasedRoute>
             </ProtectedRoute>
           }
