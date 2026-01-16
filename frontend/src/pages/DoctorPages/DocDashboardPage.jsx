@@ -20,6 +20,7 @@ import { authStore } from "../../store/auth.store.js";
 import LoadingSpinner from "../../components/ui/LoadingSpinner.jsx";
 import useReviewStore from "../../store/review.store.js";
 import ErrorPage from "../../components/ui/errorPage.jsx";
+import { useNavigate } from "react-router-dom";
 
 export default function DocDashboardPage() {
   const [selectedAppointment, setSelectedAppointment] = useState(null);
@@ -31,6 +32,7 @@ export default function DocDashboardPage() {
     isLoading: reviewsLoading,
     fetchDoctorReviews,
   } = useReviewStore();
+  const navigate = useNavigate();
 
   const filteredReviews =
     filterRating === "all"
@@ -64,7 +66,7 @@ export default function DocDashboardPage() {
 
   if (loading) return <LoadingSpinner />;
 
-  if (error) return <ErrorPage error={error}/>
+  if (error) return <ErrorPage error={error} />;
 
   return (
     <>
@@ -237,6 +239,12 @@ export default function DocDashboardPage() {
 
                       {/* Action Button */}
                       <div className="flex justify-end">
+                        <button className="group relative cursor-pointer mr-6" onClick={()=> navigate(`/patient-history/${appt.patientId._id}`)}>
+                          <div className="relative bg-gradient-to-r from-[#0B5FA5] to-[#1F7CCB] text-white px-6 py-2.5 rounded-lg shadow-md hover:shadow-lg transition-all hover:scale-105 flex items-center gap-2 text-sm font-semibold">
+                            <FileText className="w-4 h-4" />
+                            View History
+                          </div>
+                        </button>
                         <button
                           onClick={() => setSelectedAppointment(appt)}
                           className="group relative cursor-pointer"
