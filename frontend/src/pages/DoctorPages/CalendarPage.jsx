@@ -96,8 +96,6 @@ export default function CalendarPage() {
     const date = start.toISOString().split("T")[0];
     const time = start.toTimeString().slice(0, 5);
 
-    toast.loading("Rescheduling appointment...");
-
     const success = await rescheduleAppointments(appointmentId, date, time);
     if (!success) {
       toast.error("Error in rescheduling");
