@@ -47,7 +47,13 @@ export const doctorStore = create((set) => ({
     }
   },
 
-  givePrescription: async ({ medicines, diagnosis, notes, appointmentId,followUp }) => {
+  givePrescription: async ({
+    medicines,
+    diagnosis,
+    notes,
+    appointmentId,
+    followUp,
+  }) => {
     set({ loading: true, error: null });
 
     try {
@@ -142,27 +148,52 @@ export const doctorStore = create((set) => ({
     }
   },
 
-  rescheduleAppointments: async(appointmentId, date, time)=> {
-    try{
-      const res = await doctorInstance.put(`/reschedule/${appointmentId}`,{date,time});
+  rescheduleAppointments: async (appointmentId, date, time) => {
+    try {
+      const res = await doctorInstance.put(`/reschedule/${appointmentId}`, {
+        date,
+        time,
+      });
 
       const updatedAppointment = res.data.appointment;
 
-      set((state)=> ({
-        appointments: state.appointments.map((appt)=> 
+      set((state) => ({
+        appointments: state.appointments.map((appt) =>
           appt._id === appointmentId ? updatedAppointment : appt
         ),
       }));
 
       return true;
-    }
-    catch(error){
-       set({
+    } catch (error) {
+      set({
         error: error.response?.data?.message || "Failed to reschedule",
         loading: false,
       });
       return false;
     }
-  
-  }
+  },
+
+  patientPrescriptionHistory: async (patientId) => {
+    set({ loading: true, error: null });
+    try {
+      const res = await doctorInstance.get(
+        `/prescription/history/${patientId}`
+      );
+
+      set({
+        prescriptions: res.data.prescriptions,
+        loading: false,
+      });
+      return true;
+    } catch (error) {
+      set({
+        error:
+          error.response?.data?.message ||
+          "Failed to fetch patient prescription history",
+        loading: false,
+      });
+
+      return false;
+    }
+  },
 }));
