@@ -273,3 +273,52 @@ export const getPrescriptionById = async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
+
+export const getPatientPrescriptionHistory = async (req, res) => {
+  try {
+    const { patientId } = req.params;
+    const doctorUserId = req.user._id;
+
+    const doctor = await Doctor.findOne({ userId: doctorUserId });
+    if (!doctor) {
+      return res.status(404).json({
+        message: "Doctor profile not found",
+      });
+    }
+
+    const prescriptions = await Prescription.find({ patientId })
+      .populate({
+        path: "patientId",
+        populate: {
+          path: "userId",
+          select: "name email",
+        },
+      })
+      .populate({
+        path: "doctorId",
+        populate: {
+          path: "userId",
+          select: "name email",
+        },
+      })
+      .populate("appointmentId")
+      .sort({ createdAt: -1 });
+
+    if (prescriptions.length === 0) {
+      return res.status(404).json({
+        message: "No prescriptions found for this patient",
+      });
+    }
+
+    return res.status(200).json({
+      message: "Prescription history fetched successfully",
+      count: prescriptions.length,
+      prescriptions,
+    });
+  } catch (error) {
+    console.error("Error fetching prescription history:", error);
+    res.status(500).json({
+      message: "Internal server error",
+    });
+  }
+};
