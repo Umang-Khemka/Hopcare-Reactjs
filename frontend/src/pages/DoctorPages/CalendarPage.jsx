@@ -156,23 +156,23 @@ export default function CalendarPage() {
     <div className="min-h-screen font-sans bg-gradient-to-br from-gray-50 via-blue-50/30 to-gray-50">
       {/* NAVBAR */}
       <section className="bg-gradient-to-b from-[#0B5FA5] via-[#1F7CCB] to-[#4AA3E0] text-white shadow-lg">
-        <div className="max-w-7xl mx-auto px-6">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <DocNavbar />
         </div>
       </section>
 
-      <div className="max-w-7xl mx-auto px-6 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 sm:py-8">
         {/* PAGE HEADER */}
-        <div className="mb-8">
-          <div className="flex items-center gap-3 mb-2">
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#0B5FA5] to-[#4AA3E0] flex items-center justify-center shadow-lg">
-              <Calendar className="w-6 h-6 text-white" />
+        <div className="mb-6 sm:mb-8">
+          <div className="flex items-center gap-2 sm:gap-3 mb-2">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br from-[#0B5FA5] to-[#4AA3E0] flex items-center justify-center shadow-lg">
+              <Calendar className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
             </div>
             <div>
-              <h1 className="text-3xl font-extrabold text-[#0B5FA5]">
+              <h1 className="text-2xl sm:text-3xl font-extrabold text-[#0B5FA5]">
                 Appointment Calendar
               </h1>
-              <p className="text-gray-600 text-sm">
+              <p className="text-gray-600 text-xs sm:text-sm">
                 Manage and schedule your patient appointments
               </p>
             </div>
@@ -180,36 +180,42 @@ export default function CalendarPage() {
         </div>
 
         {/* STATS CARDS */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8">
           <div className="group relative overflow-hidden rounded-2xl bg-white shadow-lg hover:shadow-xl transition-all duration-300 border border-blue-100">
             <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-500/10 to-transparent rounded-bl-full"></div>
-            <div className="relative p-6">
-              <div className="flex items-center justify-between mb-4">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-lg">
-                  <Users className="w-6 h-6 text-white" />
+            <div className="relative p-4 sm:p-6">
+              <div className="flex items-center justify-between mb-3 sm:mb-4">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-lg">
+                  <Users className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                 </div>
-                <span className="text-4xl font-bold text-blue-500">
+                <span className="text-3xl sm:text-4xl font-bold text-blue-500">
                   {stats.booked}
                 </span>
               </div>
-              <h3 className="text-lg font-semibold text-gray-800">Booked</h3>
-              <p className="text-sm text-gray-500 mt-1">Active appointments</p>
+              <h3 className="text-base sm:text-lg font-semibold text-gray-800">
+                Booked
+              </h3>
+              <p className="text-xs sm:text-sm text-gray-500 mt-1">
+                Active appointments
+              </p>
             </div>
           </div>
 
           <div className="group relative overflow-hidden rounded-2xl bg-white shadow-lg hover:shadow-xl transition-all duration-300 border border-green-100">
             <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-green-500/10 to-transparent rounded-bl-full"></div>
-            <div className="relative p-6">
-              <div className="flex items-center justify-between mb-4">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center shadow-lg">
-                  <CheckCircle className="w-6 h-6 text-white" />
+            <div className="relative p-4 sm:p-6">
+              <div className="flex items-center justify-between mb-3 sm:mb-4">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center shadow-lg">
+                  <CheckCircle className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                 </div>
-                <span className="text-4xl font-bold text-green-500">
+                <span className="text-3xl sm:text-4xl font-bold text-green-500">
                   {stats.completed}
                 </span>
               </div>
-              <h3 className="text-lg font-semibold text-gray-800">Completed</h3>
-              <p className="text-sm text-gray-500 mt-1">
+              <h3 className="text-base sm:text-lg font-semibold text-gray-800">
+                Completed
+              </h3>
+              <p className="text-xs sm:text-sm text-gray-500 mt-1">
                 Finished consultations
               </p>
             </div>
@@ -217,45 +223,80 @@ export default function CalendarPage() {
 
           <div className="group relative overflow-hidden rounded-2xl bg-white shadow-lg hover:shadow-xl transition-all duration-300 border border-red-100">
             <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-red-500/10 to-transparent rounded-bl-full"></div>
-            <div className="relative p-6">
-              <div className="flex items-center justify-between mb-4">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-red-500 to-red-600 flex items-center justify-center shadow-lg">
-                  <XCircle className="w-6 h-6 text-white" />
+            <div className="relative p-4 sm:p-6">
+              <div className="flex items-center justify-between mb-3 sm:mb-4">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br from-red-500 to-red-600 flex items-center justify-center shadow-lg">
+                  <XCircle className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                 </div>
-                <span className="text-4xl font-bold text-red-500">
+                <span className="text-3xl sm:text-4xl font-bold text-red-500">
                   {stats.cancelled}
                 </span>
               </div>
-              <h3 className="text-lg font-semibold text-gray-800">Cancelled</h3>
-              <p className="text-sm text-gray-500 mt-1">Cancelled bookings</p>
+              <h3 className="text-base sm:text-lg font-semibold text-gray-800">
+                Cancelled
+              </h3>
+              <p className="text-xs sm:text-sm text-gray-500 mt-1">
+                Cancelled bookings
+              </p>
             </div>
           </div>
         </div>
 
         {/* CALENDAR */}
         <div className="bg-white rounded-2xl shadow-xl border border-gray-200 overflow-hidden">
-          <div className="p-8">
+          <div className="p-4 sm:p-8">
             <style>{`
               .fc {
                 font-family: inherit;
               }
               
               .fc .fc-toolbar-title {
-                font-size: 1.5rem;
+                font-size: 1.125rem;
                 font-weight: 700;
                 color: #0B5FA5;
+              }
+              
+              @media (min-width: 640px) {
+                .fc .fc-toolbar-title {
+                  font-size: 1.5rem;
+                }
+              }
+              
+              .fc .fc-toolbar {
+                flex-direction: column;
+                gap: 0.75rem;
+              }
+              
+              @media (min-width: 640px) {
+                .fc .fc-toolbar {
+                  flex-direction: row;
+                  gap: 0;
+                }
+              }
+              
+              .fc .fc-toolbar-chunk {
+                display: flex;
+                gap: 0.25rem;
               }
               
               .fc .fc-button {
                 background: linear-gradient(135deg, #0B5FA5 0%, #4AA3E0 100%);
                 border: none;
-                padding: 0.5rem 1rem;
+                padding: 0.375rem 0.75rem;
                 font-weight: 600;
                 text-transform: capitalize;
                 border-radius: 0.5rem;
                 box-shadow: 0 2px 4px rgba(11, 95, 165, 0.2);
                 transition: all 0.2s;
                 outline: none;
+                font-size: 0.875rem;
+              }
+              
+              @media (min-width: 640px) {
+                .fc .fc-button {
+                  padding: 0.5rem 1rem;
+                  font-size: 1rem;
+                }
               }
               
               .fc .fc-button:hover {
@@ -287,13 +328,20 @@ export default function CalendarPage() {
               
               .fc .fc-col-header-cell {
                 background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
-                padding: 1rem 0.5rem;
+                padding: 0.5rem 0.25rem;
                 font-weight: 600;
                 color: #0B5FA5;
                 text-transform: uppercase;
-                font-size: 0.75rem;
+                font-size: 0.625rem;
                 letter-spacing: 0.05em;
                 border: none;
+              }
+              
+              @media (min-width: 640px) {
+                .fc .fc-col-header-cell {
+                  padding: 1rem 0.5rem;
+                  font-size: 0.75rem;
+                }
               }
               
               .fc .fc-daygrid-day {
@@ -307,7 +355,15 @@ export default function CalendarPage() {
               .fc .fc-daygrid-day-number {
                 color: #334155;
                 font-weight: 600;
-                padding: 0.5rem;
+                padding: 0.25rem;
+                font-size: 0.875rem;
+              }
+              
+              @media (min-width: 640px) {
+                .fc .fc-daygrid-day-number {
+                  padding: 0.5rem;
+                  font-size: 1rem;
+                }
               }
               
               .fc .fc-day-today {
@@ -323,24 +379,43 @@ export default function CalendarPage() {
               }
               
               .fc .fc-timegrid-slot {
-                height: 3rem;
+                height: 2.5rem;
                 border-color: #e2e8f0;
+              }
+              
+              @media (min-width: 640px) {
+                .fc .fc-timegrid-slot {
+                  height: 3rem;
+                }
               }
               
               .fc .fc-timegrid-slot-label {
                 color: #64748b;
                 font-weight: 500;
-                font-size: 0.875rem;
+                font-size: 0.75rem;
+              }
+              
+              @media (min-width: 640px) {
+                .fc .fc-timegrid-slot-label {
+                  font-size: 0.875rem;
+                }
               }
               
               .fc .fc-event {
                 border-radius: 0.5rem;
-                padding: 0.25rem 0.5rem;
+                padding: 0.125rem 0.25rem;
                 font-weight: 600;
-                font-size: 0.875rem;
+                font-size: 0.75rem;
                 border: none;
                 box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
                 transition: all 0.2s;
+              }
+              
+              @media (min-width: 640px) {
+                .fc .fc-event {
+                  padding: 0.25rem 0.5rem;
+                  font-size: 0.875rem;
+                }
               }
               
               .fc .fc-event:hover {
@@ -404,64 +479,64 @@ export default function CalendarPage() {
       {selectedAppointment && (
         <Modal onClose={() => setSelectedAppointment(null)}>
           <div className="space-y-4">
-            <div className="flex items-center gap-3 pb-4 border-b border-gray-200">
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#0B5FA5] to-[#4AA3E0] flex items-center justify-center">
-                <Calendar className="w-6 h-6 text-white" />
+            <div className="flex items-center gap-2 sm:gap-3 pb-4 border-b border-gray-200">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br from-[#0B5FA5] to-[#4AA3E0] flex items-center justify-center">
+                <Calendar className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
               </div>
               <div>
-                <h2 className="text-2xl font-bold text-[#0B5FA5]">
+                <h2 className="text-xl sm:text-2xl font-bold text-[#0B5FA5]">
                   Appointment Details
                 </h2>
-                <p className="text-sm text-gray-500">
+                <p className="text-xs sm:text-sm text-gray-500">
                   {selectedAppointment.patientName}
                 </p>
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <div className="bg-gray-50 rounded-xl p-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+              <div className="bg-gray-50 rounded-xl p-3 sm:p-4">
                 <p className="text-xs text-gray-500 uppercase font-semibold mb-1">
                   Patient Name
                 </p>
-                <p className="text-gray-900 font-semibold">
+                <p className="text-gray-900 font-semibold text-sm sm:text-base">
                   {selectedAppointment.patientName}
                 </p>
               </div>
 
-              <div className="bg-gray-50 rounded-xl p-4">
+              <div className="bg-gray-50 rounded-xl p-3 sm:p-4">
                 <p className="text-xs text-gray-500 uppercase font-semibold mb-1">
                   Age
                 </p>
-                <p className="text-gray-900 font-semibold">
+                <p className="text-gray-900 font-semibold text-sm sm:text-base">
                   {selectedAppointment.age}
                 </p>
               </div>
 
-              <div className="bg-gray-50 rounded-xl p-4">
+              <div className="bg-gray-50 rounded-xl p-3 sm:p-4">
                 <p className="text-xs text-gray-500 uppercase font-semibold mb-1">
                   Date
                 </p>
-                <p className="text-gray-900 font-semibold">
+                <p className="text-gray-900 font-semibold text-sm sm:text-base">
                   {selectedAppointment.date}
                 </p>
               </div>
 
-              <div className="bg-gray-50 rounded-xl p-4">
+              <div className="bg-gray-50 rounded-xl p-3 sm:p-4">
                 <p className="text-xs text-gray-500 uppercase font-semibold mb-1">
                   Time
                 </p>
-                <p className="text-gray-900 font-semibold">
+                <p className="text-gray-900 font-semibold text-sm sm:text-base">
                   {selectedAppointment.time}
                 </p>
               </div>
             </div>
 
-            <div className="bg-gray-50 rounded-xl p-4">
+            <div className="bg-gray-50 rounded-xl p-3 sm:p-4">
               <p className="text-xs text-gray-500 uppercase font-semibold mb-1">
                 Status
               </p>
               <span
-                className={`inline-flex items-center px-3 py-1 rounded-lg text-sm font-semibold ${
+                className={`inline-flex items-center px-3 py-1 rounded-lg text-xs sm:text-sm font-semibold ${
                   selectedAppointment.status === "booked"
                     ? "bg-blue-100 text-blue-700"
                     : selectedAppointment.status === "completed"
@@ -474,11 +549,11 @@ export default function CalendarPage() {
               </span>
             </div>
 
-            <div className="bg-gray-50 rounded-xl p-4">
+            <div className="bg-gray-50 rounded-xl p-3 sm:p-4">
               <p className="text-xs text-gray-500 uppercase font-semibold mb-2">
                 Symptoms
               </p>
-              <p className="text-gray-900 leading-relaxed">
+              <p className="text-gray-900 leading-relaxed text-sm sm:text-base">
                 {selectedAppointment.symptoms}
               </p>
             </div>
